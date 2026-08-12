@@ -1,0 +1,29 @@
+# Trend CTA — Binance USDT-M perpetual
+exchange: binanceusdm
+testnet: false
+dry_run: true
+
+symbols:
+  - BTC/USDT:USDT
+  - ETH/USDT:USDT
+
+timeframe: 1h
+poll_seconds: 30
+candle_limit: 200
+
+# Donchian / Turtle-style CTA
+donchian_entry: 20
+donchian_exit: 10
+atr_period: 14
+atr_stop_mult: 2.0
+
+# Risk
+leverage: 3
+risk_per_trade: 0.01          # 1% equity per new trade
+max_positions: 2
+max_notional_pct: 0.5         # max 50% equity notional per symbol
+max_daily_loss_pct: 0.03      # halt new entries after -3% day
+cooldown_bars_after_stop: 1
+
+# Logging
+log_level: INFO
