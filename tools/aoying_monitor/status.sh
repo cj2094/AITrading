@@ -59,3 +59,13 @@ if [[ -f "$WEB_LOG" ]]; then
   echo "--- last web log lines ---"
   tail -n 8 "$WEB_LOG"
 fi
+
+PUBLIC_URL_FILE="$DIR/logs/public_url.txt"
+if [[ -f "$PUBLIC_URL_FILE" ]]; then
+  echo "public URL: $(cat "$PUBLIC_URL_FILE")"
+elif [[ -f "$DIR/logs/cloudflare.log" ]]; then
+  url="$(grep -Eo 'https://[a-zA-Z0-9-]+\.trycloudflare\.com' "$DIR/logs/cloudflare.log" | tail -n1 || true)"
+  if [[ -n "$url" ]]; then
+    echo "public URL: $url"
+  fi
+fi
