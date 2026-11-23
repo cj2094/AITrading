@@ -3,8 +3,11 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 DIR="$ROOT/tools/aoying_monitor"
 SESSION="${AOYING_TMUX_SESSION:-aoying-monitor}"
+WEB_SESSION="${AOYING_WEB_TMUX_SESSION:-aoying-web}"
+WEB_PORT="${AOYING_WEB_PORT:-8787}"
 TMUX_CONF="/exec-daemon/tmux.portal.conf"
 LOG="$DIR/logs/watch.log"
+WEB_LOG="$DIR/logs/web.log"
 STATE="$DIR/data/state.json"
 
 tmux_bin() {
@@ -17,10 +20,17 @@ tmux_bin() {
 
 echo "=== aoying monitor status ==="
 if tmux_bin has-session -t "=$SESSION" 2>/dev/null; then
-  echo "tmux: RUNNING ($SESSION)"
+  echo "watch tmux: RUNNING ($SESSION)"
   tmux_bin list-panes -t "$SESSION" -F 'pid=#{pane_pid} cmd=#{pane_current_command}'
 else
-  echo "tmux: STOPPED"
+  echo "watch tmux: STOPPED"
+fi
+
+if tmux_bin has-session -t "=$WEB_SESSION" 2>/dev/null; then
+  echo "web   tmux: RUNNING ($WEB_SESSION)  http://127.0.0.1:${WEB_PORT}/"
+  tmux_bin list-panes -t "$WEB_SESSION" -F 'pid=#{pane_pid} cmd=#{pane_current_command}'
+else
+  echo "web   tmux: STOPPED"
 fi
 
 if [[ -f "$STATE" ]]; then
@@ -42,8 +52,10 @@ else
 fi
 
 if [[ -f "$LOG" ]]; then
-  echo "--- last 20 log lines ---"
-  tail -n 20 "$LOG"
-else
-  echo "log: missing"
+  echo "--- last watch log lines ---"
+  tail -n 8 "$LOG"
+fi
+if [[ -f "$WEB_LOG" ]]; then
+  echo "--- last web log lines ---"
+  tail -n 8 "$WEB_LOG"
 fi
