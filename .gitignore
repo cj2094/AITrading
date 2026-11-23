@@ -72,6 +72,13 @@ decision_logs/
 coin_pool_cache/
 nofx_test
 
+# 熬鹰资本带单监控本地状态 / 日志
+tools/aoying_monitor/state.json
+tools/aoying_monitor/state.json.tmp
+tools/aoying_monitor/data/
+tools/aoying_monitor/logs/
+tools/aoying_monitor/__pycache__/
+
 # Node.js
 web/node_modules/
 node_modules/
@@ -80,3 +87,8 @@ web/.vite/
 
 # ESLint 临时报告文件（调试时生成，不纳入版本控制）
 eslint-*.json
+
+# aoying dashboard (Next.js)
+tools/aoying_dashboard/node_modules/
+tools/aoying_dashboard/.next/
+tools/aoying_dashboard/logs/
